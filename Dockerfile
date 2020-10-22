@@ -13,24 +13,24 @@ COPY package.json yarn.lock ./
 RUN yarn install --production
 
 # elm doesn't work under alpine 6 or 8
-FROM node:6-slim AS elm-build
-WORKDIR /home/node/app
+#FROM node:6-slim AS elm-build
+#WORKDIR /home/node/app
 
-RUN npm install -g elm --silent
+#RUN npm install -g elm@0.18.0
 
-COPY elm-package.json ./
-RUN elm package install -y
+#COPY elm-package.json ./
+#RUN elm package install -y
 
-COPY . .
+#COPY . .
 
-RUN elm make Main.elm --output=client/index.js
+#RUN elm make Main.elm --output=client/index.js
 
 FROM base AS release
 
 WORKDIR /home/node/app
 
 COPY --from=dependencies /home/node/app/node_modules node_modules
-COPY --from=elm-build /home/node/app/client/ client
+COPY client client
 COPY server server
 
 HEALTHCHECK --interval=5s --timeout=3s \

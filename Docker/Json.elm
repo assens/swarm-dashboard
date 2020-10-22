@@ -54,7 +54,7 @@ service =
         (Json.at [ "ID" ] Json.string)
         (Json.at [ "Spec", "Name" ] Json.string)
         (Json.at [ "Spec", "TaskTemplate", "ContainerSpec" ] containerSpec)
-        ((Json.maybe (Json.at [ "Endpoint", "VirtualIPs" ] (Json.list (Json.at [ "NetworkID" ] Json.string)))) |> Json.andThen filterEmptyNetworks)
+        ((Json.maybe (Json.maybe [ "Endpoint", "VirtualIPs" ] (Json.list (Json.maybe [ "NetworkID" ] Json.string)))) |> Json.andThen filterEmptyNetworks)
 
 
 date : Json.Decoder Date
